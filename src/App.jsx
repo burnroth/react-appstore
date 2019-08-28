@@ -25,7 +25,6 @@ import React, { Component } from "react";
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.state = {};
 
     this.handleSearch = this.handleSearch.bind(this)
@@ -35,15 +34,20 @@ class App extends Component {
   componentDidMount() {
     for (let key of api.addons) {
       this.setState({
-        [key.name]: false
+        [key.name]: true
       });
     }
   }
 
+  // SImple search function which loops over the state and checks if each value includes the search query
   handleSearch(e){
     e.persist()
     for( let key in this.state ) {
-      if(key.includes(e.target.value)){
+      if(!key.includes(e.target.value)){
+        this.setState({
+          [key]: false
+        })
+      } else {
         this.setState({
           [key]: true
         })
