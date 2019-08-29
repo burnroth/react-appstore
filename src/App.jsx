@@ -8,26 +8,25 @@ import {
   CardText,
   CardBody,
   CardTitle,
-  CardSubtitle,
   Button,
   Jumbotron,
-  ContainerFluid,
-  Form,
-  FormGroup,
-  Label,
-  Input
+
 } from "reactstrap";
 
 // const api = fetch("https://api.lime-bootstrap.com/addons/?page=1").then(response => response.json()).then(res => console.log)
 
 import React, { Component } from "react";
+import Search from "./components/Search.jsx";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      modal: false
+    };
 
-    this.handleSearch = this.handleSearch.bind(this)
+    this.handleSearch = this.handleSearch.bind(this);
+    this.showModal = this.showModal.bind(this);
   }
 
   // Populating the state with the names of the addons
@@ -40,53 +39,38 @@ class App extends Component {
   }
 
   // SImple search function which loops over the state and checks if each value includes the search query
-  handleSearch(e){
-    e.persist()
-    for( let key in this.state ) {
-      if(!key.includes(e.target.value)){
+  handleSearch(e) {
+    e.persist();
+    for (let key in this.state) {
+      if (!key.includes(e.target.value.toLowerCase())) {
         this.setState({
           [key]: false
-        })
+        });
       } else {
         this.setState({
           [key]: true
-        })
+        });
       }
     }
-    console.log(e)
   }
 
+  showModal(e) {
+    this.setState({
+      modal: true
+    });
+  }
 
   render() {
     return (
       <div>
         <Jumbotron>
-          <h1 className="display-3">Hello, world!</h1>
-          <p className="lead">
-            This is a simple hero unit, a simple Jumbotron-style component for
-            calling extra attention to featured content or information.
-          </p>
-          <hr className="my-2" />
-          <p>
-            It uses utility classes for typography and spacing to space content
-            out within the larger container.
-          </p>
-          <p className="lead">
-            <Button color="primary">Learn More</Button>
-          </p>
-          <Form onChange={this.handleSearch} >
-            <FormGroup>
-              <Label>Label</Label>
-              <Input type="search" />
-            </FormGroup>
-          </Form>
+          <h1 className="display-3">Limestore</h1>
+          <Search handleSearch={this.handleSearch} />
         </Jumbotron>
         <Container>
           <Row>
             {api.addons.map(addon => {
-
               if (this.state[addon.name]) {
-
                 return (
                   <Col key={addon.id} name={addon.displayName} xs="4">
                     <Card>
@@ -107,7 +91,7 @@ class App extends Component {
                           <h4>{addon.displayName}</h4>
                         </CardTitle>
                         <CardText>{addon.shortDesc} </CardText>
-                        <Button>Button</Button>
+                        <Button onClick={this.showModal}>Button</Button>
                       </CardBody>
                     </Card>
                   </Col>
