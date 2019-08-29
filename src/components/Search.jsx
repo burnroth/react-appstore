@@ -1,4 +1,4 @@
-import { Form, FormGroup, Label, Input } from "reactstrap";
+import { Form, FormGroup, Input } from "reactstrap";
 
 import React, { Component } from 'react'
 
@@ -14,8 +14,7 @@ class Search extends Component {
     return (
       <Form onChange={this.props.handleSearch}>
       <FormGroup>
-        <Label>Label</Label>
-        <Input type="search" />
+        <Input placeholder="Sök" type="search" />
       </FormGroup>
     </Form>
     )

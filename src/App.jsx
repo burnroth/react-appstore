@@ -1,112 +1,89 @@
 import React, { Component } from "react";
-import AppNavbar from './components/AppNavbar'
+import AppNavbar from "./components/AppNavbar";
+import AddonModal from "./components/AddonModal";
+import Cards from "./components/Cards";
 import api from "./api.json";
-import {
-  Row,
-  Container,
-  Col,
-  Card,
-  CardImg,
-  CardText,
-  CardBody,
-  CardTitle,
-  Button,
-  Jumbotron,
-} from "reactstrap";
+import { Jumbotron } from "reactstrap";
 
 // const api = fetch("https://api.lime-bootstrap.com/addons/?page=1").then(response => response.json()).then(res => console.log)
-
-
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modal: false
+      modal: false,
+      activeModalContent: {},
+      addons: {}
     };
 
     this.handleSearch = this.handleSearch.bind(this);
     this.showModal = this.showModal.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   // Populating the state with the names of the addons
   componentDidMount() {
     for (let key of api.addons) {
-      this.setState({
-        [key.name]: true
-      });
+      this.setState(prevState => ({
+        addons: {
+          ...prevState.addons,
+          [key.name]: true
+        }
+      }));
     }
   }
 
   // SImple search function which loops over the state and checks if each value includes the search query
   handleSearch(e) {
     e.persist();
-    for (let key in this.state) {
+    for (let key in this.state.addons) {
       if (!key.includes(e.target.value.toLowerCase())) {
-        this.setState({
-          [key]: false
-        });
+        this.setState(prevState => ({
+          addons: {
+            ...prevState.addons,
+            [key]: false
+          }
+        }));
       } else {
-        this.setState({
-          [key]: true
-        });
+        this.setState(prevState => ({
+          addons: {
+            ...prevState.addons,
+            [key]: true
+          }
+        }));
       }
     }
   }
 
-  showModal(e) {
+  showModal(addon) {
     this.setState({
-      modal: true
+      modal: true,
+      activeModalContent: addon
     });
-    alert()
+  }
+
+  toggleModal() {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
   }
 
   render() {
     return (
       <div>
-        <AppNavbar
-        handleSearch={this.handleSearch}
-        />
+        <AppNavbar handleSearch={this.handleSearch} />
+        {this.state.modal ? (
+          <AddonModal
+            modal={this.state.modal}
+            className="maggan"
+            toggleModal={this.toggleModal}
+            activeModalContent={this.state.activeModalContent}
+          />
+        ) : null}
         <Jumbotron>
-          <h1 className="display-3">Limestore</h1>
-          
+          <h1 className="display-3 text-center">Lime Store</h1>
         </Jumbotron>
-        <Container>
-          <Row>
-            {api.addons.map(addon => {
-              if (this.state[addon.name]) {
-                return (
-                  <Col key={addon.id} name={addon.displayName} xs="4">
-                    {this.state.modal ? console.log(addon.displayName) : null }
-                    <Card>
-
-                    {/* checks if the addon has an image. if not, sets the CardImg to a default "Lime CRM addon"-pic */}
-                      {addon.thumbnail ? (
-                        <CardImg
-                          top
-                          width="100%"
-                          src={
-                            "data:image/png;base64," +
-                            addon.thumbnail.replace("b'", "").replace("'", "")
-                          }
-                          alt="Card image cap"
-                        />
-                      ) : null}
-
-                      <CardBody>
-                        <CardTitle>
-                          <h4>{addon.displayName}</h4>
-                        </CardTitle>
-                        <CardText>{addon.shortDesc} </CardText>
-                        <Button onClick={this.showModal}>Button</Button>
-                      </CardBody>
-                    </Card>
-                  </Col>
-                );
-              }
-            })}
-          </Row>
-        </Container>
+            <Cards showModal={this.showModal} state={this.state} api={api} />
       </div>
     );
   }
