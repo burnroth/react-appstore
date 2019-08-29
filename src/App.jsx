@@ -1,3 +1,5 @@
+import React, { Component } from "react";
+import AppNavbar from './components/AppNavbar'
 import api from "./api.json";
 import {
   Row,
@@ -10,13 +12,11 @@ import {
   CardTitle,
   Button,
   Jumbotron,
-
 } from "reactstrap";
 
 // const api = fetch("https://api.lime-bootstrap.com/addons/?page=1").then(response => response.json()).then(res => console.log)
 
-import React, { Component } from "react";
-import Search from "./components/Search.jsx";
+
 
 class App extends Component {
   constructor(props) {
@@ -58,14 +58,18 @@ class App extends Component {
     this.setState({
       modal: true
     });
+    alert()
   }
 
   render() {
     return (
       <div>
+        <AppNavbar
+        handleSearch={this.handleSearch}
+        />
         <Jumbotron>
           <h1 className="display-3">Limestore</h1>
-          <Search handleSearch={this.handleSearch} />
+          
         </Jumbotron>
         <Container>
           <Row>
@@ -73,7 +77,10 @@ class App extends Component {
               if (this.state[addon.name]) {
                 return (
                   <Col key={addon.id} name={addon.displayName} xs="4">
+                    {this.state.modal ? console.log(addon.displayName) : null }
                     <Card>
+
+                    {/* checks if the addon has an image. if not, sets the CardImg to a default "Lime CRM addon"-pic */}
                       {addon.thumbnail ? (
                         <CardImg
                           top
