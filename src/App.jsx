@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import Helmet from "react-helmet";
 import AppNavbar from "./components/AppNavbar";
 import AddonModal from "./components/AddonModal";
 import Cards from "./components/Cards";
 import api from "./api.json";
 import { Jumbotron } from "reactstrap";
-
+// eslint-disable-next-line
+import analytics from 'react-segment'
 // const api = fetch("https://api.lime-bootstrap.com/addons/?page=1").then(response => response.json()).then(res => console.log)
 
 class App extends Component {
@@ -23,6 +25,9 @@ class App extends Component {
 
   // Populating the state with the names of the addons
   componentDidMount() {
+    window.analytics.load("rBiTH1qWEocYJOaLHF5VPA0jB1suwx1C");
+    window.analytics.page("Home");
+// eslint-disable-next-line
     for (let key of api.addons) {
       this.setState(prevState => ({
         addons: {
@@ -36,6 +41,7 @@ class App extends Component {
   // SImple search function which loops over the state and checks if each value includes the search query
   handleSearch(e) {
     e.persist();
+    // eslint-disable-next-line
     for (let key in this.state.addons) {
       if (!key.includes(e.target.value.toLowerCase())) {
         this.setState(prevState => ({
@@ -71,6 +77,12 @@ class App extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <link
+            rel="stylesheet"
+            href="https://highlightjs.org/static/demo/styles/railscasts.css"
+          />
+        </Helmet>
         <AppNavbar handleSearch={this.handleSearch} />
         {this.state.modal ? (
           <AddonModal
@@ -83,7 +95,7 @@ class App extends Component {
         <Jumbotron>
           <h1 className="display-3 text-center">Lime Store</h1>
         </Jumbotron>
-            <Cards showModal={this.showModal} state={this.state} api={api} />
+        <Cards showModal={this.showModal} state={this.state} api={api} />
       </div>
     );
   }
