@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import Markdown from "react-markdown";
-import Highlight from "react-highlight";
+import Markdown from 'react-markdown'
+
+
 
 class AddonModal extends Component {
   constructor(props) {
@@ -41,12 +42,11 @@ class AddonModal extends Component {
   handleScroll(data, e) {
     const { scrollHeight, scrollTop, clientHeight } = e.target;
 
-    if(scrollHeight - scrollTop === clientHeight){
+    if (scrollHeight - scrollTop === clientHeight) {
       window.analytics.track("Max scroll depth reached", {
         addon: data.unique_name
       });
     }
-
   }
 
   render() {
@@ -61,7 +61,12 @@ class AddonModal extends Component {
           className={this.props.className}
         >
           <ModalHeader toggle={this.props.toggleModal}>Modal title</ModalHeader>
-          <ModalBody>{data.readme}</ModalBody>
+          <ModalBody>
+
+  <Markdown source={data.readme} />
+
+
+          </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={this.props.toggleModal}>
               Do Something

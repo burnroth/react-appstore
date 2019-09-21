@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Helmet from "react-helmet";
 import AppNavbar from "./components/AppNavbar";
 import AddonModal from "./components/AddonModal";
 import Cards from "./components/Cards";
+import Filter from "./components/Filter"
 import api from "./api.json";
-import { Jumbotron } from "reactstrap";
+import { Jumbotron, Container, Row, Col } from "reactstrap";
+
 // eslint-disable-next-line
 import analytics from 'react-segment'
 // const api = fetch("https://api.lime-bootstrap.com/addons/?page=1").then(response => response.json()).then(res => console.log)
@@ -25,6 +27,7 @@ class App extends Component {
 
   // Populating the state with the names of the addons
   componentDidMount() {
+    
     window.analytics.load("rBiTH1qWEocYJOaLHF5VPA0jB1suwx1C");
     window.analytics.page("Home");
 // eslint-disable-next-line
@@ -76,12 +79,8 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <Helmet>
-          <link
-            rel="stylesheet"
-            href="https://highlightjs.org/static/demo/styles/railscasts.css"
-          />
         </Helmet>
         <AppNavbar handleSearch={this.handleSearch} />
         {this.state.modal ? (
@@ -95,8 +94,15 @@ class App extends Component {
         <Jumbotron>
           <h1 className="display-3 text-center">Lime Store</h1>
         </Jumbotron>
+        <Container>
+          <Row>
+            <Col xs="12">
+            <Filter />
+            </Col>
+          </Row>
+        </Container>
         <Cards showModal={this.showModal} state={this.state} api={api} />
-      </div>
+      </Fragment>
     );
   }
 }
